@@ -149,7 +149,8 @@ endif
 let s:NERDTreeBufName = 'NERD_tree_'
 
 let s:tree_wid = 2
-let s:tree_markup_reg = '^[ `|]*[\-+~▾▸ ]\+'
+"let s:tree_markup_reg = '^[ `|]*[\-+~▾▸ ]\+'
+let s:tree_markup_reg = '^[ `|]*[\-+~▼▶ ]\+'
 let s:tree_up_dir_line = '.. (up a dir)'
 
 "the number to add to the nerd tree buffer name to make the buf name unique
@@ -1348,13 +1349,14 @@ function! s:TreeFileNode._renderToString(depth, drawText, vertMap, isLastChild)
         if self.path.isDirectory
             if self.isOpen
                 if g:NERDTreeDirArrows
-                    let treeParts = treeParts . '▾ '
+
+                    let treeParts = treeParts . '▼ '
                 else
                     let treeParts = treeParts . '~'
                 endif
             else
                 if g:NERDTreeDirArrows
-                    let treeParts = treeParts . '▸ '
+                    let treeParts = treeParts . '▶ '
                 else
                     let treeParts = treeParts . '+'
                 endif
@@ -3044,7 +3046,7 @@ function! s:getPath(ln)
 
     if !g:NERDTreeDirArrows
         " in case called from outside the tree
-        if line !~# '^ *[|`▸▾ ]' || line =~# '^$'
+        if line !~# '^ *[|`▼▶ ]' || line =~# '^$'
             return {}
         endif
     endif
@@ -3102,7 +3104,7 @@ function! s:getTreeWinNum()
 endfunction
 "FUNCTION: s:indentLevelFor(line) {{{2
 function! s:indentLevelFor(line)
-    let level = match(a:line, '[^ \-+~▸▾`|]') / s:tree_wid
+    let level = match(a:line, '[^ \-+~▼▶`|]') / s:tree_wid
     " check if line includes arrows
     if match(a:line, '[▸▾]') > -1
         " decrement level as arrow uses 3 ascii chars
@@ -3574,7 +3576,7 @@ function! s:checkForActivate()
         let startToCur = strpart(getline(line(".")), 0, col("."))
 
         if currentNode.path.isDirectory
-            if startToCur =~# s:tree_markup_reg . '$' && startToCur =~# '[+~▾▸]$'
+            if startToCur =~# s:tree_markup_reg . '$' && startToCur =~# '[+~▼▶]$'
                 call s:activateNode(0)
                 return
             endif
